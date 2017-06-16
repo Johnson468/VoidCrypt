@@ -26,7 +26,7 @@ public class AES
   
   public AES(String filePath, String pass) throws UnsupportedEncodingException, NoSuchAlgorithmException, Exception
   {
-    this.filePath = filePath.replace("\\", "/");
+    AES.filePath = filePath.replace("\\", "/");
     this.pass = pass;
     key = keyGen(hash(pass));
   }
@@ -36,8 +36,8 @@ public class AES
   public AES(String filePath, boolean isShread)
     throws UnsupportedEncodingException, NoSuchAlgorithmException, Exception
   {
-    this.filePath = filePath;
-    isShread = isShread;
+    AES.filePath = filePath;
+    AES.isShread = isShread;
     SecureRandom rand = new SecureRandom(SecureRandom.getSeed(138002));
     key = keyGen(hash(String.valueOf(rand.nextLong())));
   }
