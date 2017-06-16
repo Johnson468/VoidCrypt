@@ -105,7 +105,7 @@ public class window implements java.awt.event.ActionListener
 			System.out.println(filePath);
 			System.out.println("encrypt selected");
 			String password = null;
-			try {
+			try {//
 				do{
 					password = JOptionPane.showInputDialog(window, "Enter a password to encrypt the file (You MUST remember this to decrypt)");
 					reenteredPass = JOptionPane.showInputDialog(window, "Enter the password again");
