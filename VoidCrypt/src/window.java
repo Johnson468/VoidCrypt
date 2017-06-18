@@ -45,6 +45,7 @@ public class window implements java.awt.event.ActionListener
 	}
 	//Action listener for this class
 	public void actionPerformed(java.awt.event.ActionEvent e) {
+		String reenteredPass;
 		JOptionPane confirmPane = new JOptionPane();
 		/*
 		 * Check if the source of the click is the file selector
@@ -104,8 +105,14 @@ public class window implements java.awt.event.ActionListener
 			System.out.println(filePath);
 			System.out.println("encrypt selected");
 			String password = null;
-			try {
-				password = JOptionPane.showInputDialog(window, "Enter a password to encrypt the file (You MUST remember this to decrypt)");
+			try {//
+				do{
+					password = JOptionPane.showInputDialog(window, "Enter a password to encrypt the file (You MUST remember this to decrypt)");
+					reenteredPass = JOptionPane.showInputDialog(window, "Enter the password again");
+					if (!password.equals(reenteredPass) || password.equals("")) {
+						JOptionPane.showMessageDialog(window, "Passwords must match and not be empty");
+					}
+				} while(!passIsSame(password,reenteredPass));
 			}
 			catch (java.awt.HeadlessException e2) {
 				e2.printStackTrace();
@@ -191,5 +198,8 @@ public class window implements java.awt.event.ActionListener
 	private void setLabel(String s)
 	{
 		label.setText(s);
+	}
+	private boolean passIsSame(String p1, String p2) {
+		return p1.equals(p2) && !p1.equals("");
 	}
 }
