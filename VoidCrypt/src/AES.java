@@ -20,14 +20,14 @@ import javax.swing.JOptionPane;
 public class AES
 {
   static String filePath;
-  String pass;
+  static String pass;
   static Key key;
   static boolean isShread;
   
   public AES(String filePath, String pass) throws UnsupportedEncodingException, NoSuchAlgorithmException, Exception
   {
     AES.filePath = filePath.replace("\\", "/");
-    this.pass = pass;
+    AES.pass = pass;
     key = keyGen(hash(pass));
   }
   /*
