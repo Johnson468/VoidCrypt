@@ -113,7 +113,6 @@ public class window implements java.awt.event.ActionListener
 						JOptionPane.showMessageDialog(window, "Passwords must match and not be empty");
 					}
 				} while(!passIsSame(password,reenteredPass));
-
 			}
 			catch (java.awt.HeadlessException e2) {
 				e2.printStackTrace();
