@@ -10,7 +10,7 @@ public class VoidFile extends File{
 		// TODO Auto-generated constructor stub
 	}
 	
-	private String getExtension(String path) {
+	public String getExtension(String path) {
 		if ( path.lastIndexOf('.') > 0) {
 		    return path.substring(path.lastIndexOf('.')+1);
 		}
