@@ -20,6 +20,8 @@ import javax.swing.JOptionPane;
 public class AES
 {
   static String filePath;
+
+
   static String pass;
   static Key key;
   static boolean isShread;
@@ -43,7 +45,7 @@ public class AES
   }
   
   private static byte[] getFile() {
-    File f = new File(filePath);
+    VoidFile f = new VoidFile(filePath);
     InputStream is = null;
     try {
       is = new FileInputStream(f);
@@ -82,6 +84,7 @@ public class AES
       }
     }
     saveFile(encrypted);
+    
     if (!isShread) {
       JOptionPane.showMessageDialog(null, "Encryption complete");
     } else {
@@ -109,9 +112,11 @@ public class AES
   }
   
   private static void saveFile(byte[] bytes) throws IOException {
+	VoidFile vf = new VoidFile(filePath);
     FileOutputStream fos = new FileOutputStream(filePath);
     fos.write(bytes);
     fos.close();
+    vf.setExtension(filePath);
   }
   
   private static Key keyGen(String k) throws Exception {
@@ -127,7 +132,7 @@ public class AES
   }
   
   public static boolean shread() throws Exception { encrypt();
-    File f = new File(filePath.replace("\\", "/"));
+    VoidFile f = new VoidFile(filePath.replace("\\", "/"));
     return f.delete();
   }
 }
