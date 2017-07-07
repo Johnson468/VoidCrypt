@@ -40,7 +40,7 @@ public class AES
   {
     AES.filePath = filePath;
     AES.isShread = isShread;
-    SecureRandom rand = new SecureRandom(SecureRandom.getSeed(138002));
+    SecureRandom rand = new SecureRandom(SecureRandom.getSeed((int)System.currentTimeMillis()));
     key = keyGen(hash(String.valueOf(rand.nextLong())));
   }
   
