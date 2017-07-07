@@ -144,7 +144,7 @@ public class window implements java.awt.event.ActionListener
 		 */
 		else if (e.getActionCommand().equals("decrypt") && filePath != null) {
 			String extension = new VoidFile(filePath).getExtension(filePath);
-			if(!extension.equals("VCtxt")) {
+			if(!extension.equals("VCtxt") || !extension.equals("VCjpg") || !extension.equals("VCdoc")) {
 				JOptionPane.showMessageDialog(window, "This file is not a VoidCrypt encrypted file");
 				return;
 			}
