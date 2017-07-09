@@ -127,7 +127,7 @@ public class AES
     return new SecretKeySpec(tmp.getEncoded(), "AES");
   }
   
-  private static String hash(String s) throws UnsupportedEncodingException, NoSuchAlgorithmException { byte[] b = s.getBytes(StandardCharsets.UTF_8);
+  public static String hash(String s) throws UnsupportedEncodingException, NoSuchAlgorithmException { byte[] b = s.getBytes(StandardCharsets.UTF_8);
     MessageDigest digest = MessageDigest.getInstance("SHA-256");
     return new String(digest.digest(b));
   }
