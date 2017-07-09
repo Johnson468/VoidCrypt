@@ -6,10 +6,15 @@ public class VoidFile extends File{
 	public VoidFile(String path) {
 		super(path);
 		this.path = path;
-		isVCEncrypted = false;
+		isVCEncrypted = getExtension(path).contains("VC");
 		// TODO Auto-generated constructor stub
 	}
-	
+	public boolean getIsVCEncrypted() {
+		return isVCEncrypted;
+	}
+	public void setIsVCEncrypted() {
+		isVCEncrypted = getExtension(path).contains("VC");
+	}
 	public String getExtension(String path) {
 		if ( path.lastIndexOf('.') > 0) {
 		    return path.substring(path.lastIndexOf('.')+1);
