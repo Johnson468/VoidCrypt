@@ -18,8 +18,6 @@ public class VoidFile extends File{
 	}
 	public void setExtension(String path) {
 		VoidFile vf = new VoidFile(path.replace("\\", "/"));
-		if(getExtension(path).equals("txt")) {
-			vf.renameTo(new File(path + "VCtxt"));
-		}
+			vf.renameTo(new File(path + "VC" + getExtension(path)));
 	}
 }

@@ -18,10 +18,10 @@ public class main
     window w = new window();
   }
   private static boolean isFirstRun() {
-	  return !(new File("src/sums.info").exists());
+	  return !(new File("sums.info").exists());
   }
   private static boolean setupSumFile() throws Exception {
-	  File sumFile = new File("src/sums.info");
+	  File sumFile = new File("sums.info");
 	  if(!sumFile.exists()) {
 		  sumFile.createNewFile();
 	  }
