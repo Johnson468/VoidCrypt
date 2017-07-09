@@ -8,13 +8,13 @@ public class VoidFile extends File{
 	public VoidFile(String path) {
 		super(path);
 		this.path = path;
-		isVCEncrypted = getExtension().substring(0,1).equals("VC");
+		isVCEncrypted = getExtension().substring(0,2).equals("VC");
 	}
 	public boolean getIsVCEncrypted() {
 		return isVCEncrypted;
 	}
 	public void setIsVCEncrypted() {
-		isVCEncrypted = getExtension().substring(0,1).equals("VC");
+		isVCEncrypted = getExtension().substring(0,2).equals("VC");
 	}
 	public String getExtension() {
 		if (this.path.lastIndexOf('.') > 0) {
