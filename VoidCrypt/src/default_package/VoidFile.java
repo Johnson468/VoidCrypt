@@ -9,7 +9,6 @@ public class VoidFile extends File{
 		super(path);
 		this.path = path;
 		isVCEncrypted = getExtension().substring(0,1).equals("VC");
-		// TODO Auto-generated constructor stub
 	}
 	public boolean getIsVCEncrypted() {
 		return isVCEncrypted;
@@ -18,7 +17,7 @@ public class VoidFile extends File{
 		isVCEncrypted = getExtension().substring(0,1).equals("VC");
 	}
 	public String getExtension() {
-		if ( this.path.lastIndexOf('.') > 0) {
+		if (this.path.lastIndexOf('.') > 0) {
 		    return path.substring(path.lastIndexOf('.')+1);
 		}
 		return null;
