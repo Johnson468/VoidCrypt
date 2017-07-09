@@ -1,3 +1,4 @@
+package default_package;
 import javax.swing.JButton;
 
 public class encryptButton extends JButton {

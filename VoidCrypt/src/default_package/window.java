@@ -1,3 +1,4 @@
+package default_package;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import javax.swing.JFileChooser;
@@ -144,7 +145,6 @@ public class window implements java.awt.event.ActionListener
 		 * Decrypt the file using the password
 		 */
 		else if (e.getActionCommand().equals("decrypt") && filePath != null) {
-			String extension = new VoidFile(filePath).getExtension(filePath);
 			if(!new VoidFile(filePath).getIsVCEncrypted()) {
 				JOptionPane.showMessageDialog(window, "This file is not a VoidCrypt encrypted file");
 				return;
