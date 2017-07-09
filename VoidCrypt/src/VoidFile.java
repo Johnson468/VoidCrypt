@@ -13,7 +13,7 @@ public class VoidFile extends File{
 		return isVCEncrypted;
 	}
 	public void setIsVCEncrypted() {
-		isVCEncrypted = getExtension(path).contains("VC");
+		isVCEncrypted = getExtension(path).substring(0,1).equals("VC");
 	}
 	public String getExtension(String path) {
 		if ( path.lastIndexOf('.') > 0) {

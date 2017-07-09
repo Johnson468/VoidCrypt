@@ -145,7 +145,7 @@ public class window implements java.awt.event.ActionListener
 		 */
 		else if (e.getActionCommand().equals("decrypt") && filePath != null) {
 			String extension = new VoidFile(filePath).getExtension(filePath);
-			if(!isVCFile(extension)) {
+			if(!new VoidFile(filePath).getIsVCEncrypted()) {
 				JOptionPane.showMessageDialog(window, "This file is not a VoidCrypt encrypted file");
 				return;
 			}
@@ -208,12 +208,12 @@ public class window implements java.awt.event.ActionListener
 	private boolean passIsSame(String p1, String p2) {
 		return p1.equals(p2) && !p1.equals("");
 	}
-	private boolean isVCFile(String ext) {
-		for (int x = 0; x < VCExtensions.length; x++) {
-			if (ext.equals(VCExtensions[x])) {
-				return true;
-			}
-		}
-		return false;
-	}
+//	private boolean isVCFile(String ext) {
+//		for (int x = 0; x < VCExtensions.length; x++) {
+//			if (ext.equals(VCExtensions[x])) {
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 }
