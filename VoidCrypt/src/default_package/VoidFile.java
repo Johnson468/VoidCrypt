@@ -10,6 +10,7 @@ public class VoidFile extends File{
 		this.path = path;
 		isVCEncrypted = getExtension().substring(0,2).equals("VC");
 	}
+	//Checks if the file is encrypted with VoidCrypt
 	public boolean getIsVCEncrypted() {
 		return isVCEncrypted;
 	}
