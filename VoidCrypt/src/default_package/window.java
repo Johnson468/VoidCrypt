@@ -125,6 +125,7 @@ public class window implements java.awt.event.ActionListener
 				try {
 					aes = new AES(filePath, password);
 					if (aes == null) return;
+					String hashedValue = AES.hash(password);
 					AES.encrypt();
 
 				}
@@ -211,12 +212,7 @@ public class window implements java.awt.event.ActionListener
 	private boolean passIsSame(String p1, String p2) {
 		return p1.equals(p2) && !p1.equals("");
 	}
-//	private boolean isVCFile(String ext) {
-//		for (int x = 0; x < VCExtensions.length; x++) {
-//			if (ext.equals(VCExtensions[x])) {
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
+	private void storeHashedPass(String s) {
+		
+	}
 }

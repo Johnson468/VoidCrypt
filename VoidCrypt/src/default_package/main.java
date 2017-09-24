@@ -16,7 +16,7 @@ public class main
 	final Logger logger = Logger.getLogger(main.class);
 	logger.info("Application starting");
 	if (isFirstRun()) {
-		logger.info("Setting up application for first time run");
+		logger.info("Preparing for first run");
 		if (setupSumFile()) {
 			JOptionPane.showMessageDialog(null,"An unknown error has occured setting up the application for first time use");
 			logger.error("Unknown error in main");
