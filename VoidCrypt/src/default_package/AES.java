@@ -73,8 +73,9 @@ public class AES
   
   public static void encrypt() throws Exception {
     byte[] encrypted = null;
+    byte[] content = getFile();
     for (int x = 0; x < 1000; x++) {
-      byte[] content = getFile();
+      
       try
       {
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
@@ -127,9 +128,14 @@ public class AES
     return new SecretKeySpec(tmp.getEncoded(), "AES");
   }
   
-  public static String hash(String s) throws UnsupportedEncodingException, NoSuchAlgorithmException { byte[] b = s.getBytes(StandardCharsets.UTF_8);
-    MessageDigest digest = MessageDigest.getInstance("SHA-256");
-    return new String(digest.digest(b));
+  public static String hash(String s) throws UnsupportedEncodingException, NoSuchAlgorithmException { 
+	  MessageDigest mDigest = MessageDigest.getInstance("SHA-256");
+      byte[] result = mDigest.digest(s.getBytes());
+      StringBuffer sb = new StringBuffer();
+      for (int i = 0; i < result.length; i++) {
+          sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
+      } 
+      return sb.toString();
   }
   
   public static boolean shread() throws Exception { encrypt();
