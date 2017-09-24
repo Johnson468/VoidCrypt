@@ -81,6 +81,7 @@ public class AES
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
         cipher.init(1, key);
         encrypted = cipher.doFinal(content);
+        content = encrypted;
       } catch (Exception e) {
         e.printStackTrace();
       }
@@ -98,13 +99,14 @@ public class AES
   public static void decrypt() throws Exception
   {
     byte[] decrypted = null;
+    byte[] textCryp = getFile();
     for (int x = 0; x < 1000; x++) {
-      byte[] textCryp = getFile();
       try
       {
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
         cipher.init(2, key);
         decrypted = cipher.doFinal(textCryp);
+        textCryp = decrypted;
       } catch (Exception e) {
         e.printStackTrace();
       }
