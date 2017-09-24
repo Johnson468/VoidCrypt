@@ -59,6 +59,8 @@ public class window implements java.awt.event.ActionListener
 			filePath = fc.getSelectedFile().getPath().replace("\\", "/");
 			setLabel(filePath + " selected.");
 			setVisibles(true);
+		}else if (fc.getSelectedFile() == null) {
+			JOptionPane.showMessageDialog(this.window,"Please select a file");
 		}
 		/*
 		 * Check if the shred button is clicked
@@ -175,6 +177,7 @@ public class window implements java.awt.event.ActionListener
 					return;
 				}
 			}
+			setVisibles(false);
 			System.out.println("decrypt selected");
 		} else if (e.getActionCommand().equals("selectNew")) {
 			System.out.println("new button selected");

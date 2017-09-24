@@ -4,15 +4,22 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
+import org.apache.log4j.Logger;
+
 public class main
 {
   public main() {}
   
   public static void main(String[] args) throws Exception
   {
+
+	final Logger logger = Logger.getLogger(main.class);
+	logger.info("Application starting");
 	if (isFirstRun()) {
+		logger.info("Setting up application for first time run");
 		if (setupSumFile()) {
 			JOptionPane.showMessageDialog(null,"An unknown error has occured setting up the application for first time use");
+			logger.error("Unknown error in main");
 			return;
 		}
 	}
