@@ -160,10 +160,6 @@ public class window implements java.awt.event.ActionListener
 		 * Decrypt the file using the password
 		 */
 		else if (e.getActionCommand().equals("decrypt") && filePath != null) {
-			if(!new VoidFile(filePath).getIsVCEncrypted()) {
-				JOptionPane.showMessageDialog(window, "This file is not a VoidCrypt encrypted file");
-				return;
-			}
 			String password = null;
 			try {
 				password = JOptionPane.showInputDialog(window, "Enter the password for this file");
@@ -280,5 +276,8 @@ public class window implements java.awt.event.ActionListener
 			}
 		}
 		return false;
+	}
+	private boolean isAlreadyVCEncrypted(String filePath) {
+		
 	}
 }

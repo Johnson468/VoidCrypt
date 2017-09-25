@@ -11,9 +11,6 @@ public class VoidFile extends File{
 		isVCEncrypted = getExtension().substring(0,2).equals("VC");
 	}
 	//Checks if the file is encrypted with VoidCrypt
-	public boolean getIsVCEncrypted() {
-		return isVCEncrypted;
-	}
 	public void setIsVCEncrypted() {
 		isVCEncrypted = getExtension().substring(0,2).equals("VC");
 	}
@@ -22,9 +19,5 @@ public class VoidFile extends File{
 		    return path.substring(path.lastIndexOf('.')+1);
 		}
 		return null;
-	}
-	public void setExtension(String path) {
-		VoidFile vf = new VoidFile(path.replace("\\", "/"));
-			vf.renameTo(new File(path + "VC" + getExtension()));
 	}
 }
