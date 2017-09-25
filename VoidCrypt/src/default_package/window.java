@@ -143,7 +143,6 @@ public class window implements java.awt.event.ActionListener
 				e1.printStackTrace();
 			}
 			//End of try/catch block
-			System.out.println("encrypt selected");
 			
 			String password = null;
 			try {
@@ -215,6 +214,7 @@ public class window implements java.awt.event.ActionListener
 					if (aes != null) {
 						AES.decrypt();
 					}
+					removeFileInfo(filePath);
 				}
 				catch (UnsupportedEncodingException e1)
 				{
@@ -229,9 +229,7 @@ public class window implements java.awt.event.ActionListener
 				}
 			}
 			setVisibles(false);
-			System.out.println("decrypt selected");
 		} else if (e.getActionCommand().equals("selectNew")) {
-			System.out.println("new button selected");
 			setVisibles(false);
 		} else if (e.getActionCommand().equals("delete_logs")) {
 			File logFile = new File("C:\\VoidCrypt\\logs\\log4j-application.log");
@@ -296,7 +294,7 @@ public class window implements java.awt.event.ActionListener
 	 * If the next value after the hashed file name is the hashed pass, return true
 	 * Default to return false
 	 */
-	@SuppressWarnings("static-access")
+	@SuppressWarnings({ "static-access", "resource" })
 	private boolean correctPass(String s, String filePath) throws FileNotFoundException, UnsupportedEncodingException, NoSuchAlgorithmException {
 		AES aes = new AES();
 		String hashedPass = aes.hash(s);
@@ -306,16 +304,18 @@ public class window implements java.awt.event.ActionListener
 		Scanner myScan = new Scanner(sumFile);
 		while(myScan.hasNext()) {
 			if(myScan.next().equals(hashedFileName)) {
+				;
 				return myScan.next().equals(hashedPass);
 			}
 		}
+		;
 		return false;
 	}
 	/*
 	 * Check if the file selected has already been encrypted with VoidCrypt
 	 * 
 	 */
-	@SuppressWarnings("static-access")
+	@SuppressWarnings({ "static-access", "resource" })
 	private boolean isAlreadyVCEncrypted(String filePath) throws UnsupportedEncodingException, NoSuchAlgorithmException, FileNotFoundException {
 		AES aes = new AES();
 		File f = new File(filePath);
@@ -324,9 +324,42 @@ public class window implements java.awt.event.ActionListener
 		Scanner myScan = new Scanner(sumFile);
 		while(myScan.hasNext()) {
 			if(myScan.next().equals(hashedFileName)) {
+				;
 				return true;
 			}
 		}
+		;
 		return false;
 	}
+	@SuppressWarnings({ "static-access", "resource" })
+	private void removeFileInfo(String filePath) throws UnsupportedEncodingException, NoSuchAlgorithmException, FileNotFoundException {
+		String sb = "";
+		String hashedPass = "";
+		File f = new File(filePath);
+		File sumFile = new File("sums.info");
+		String fileName = f.getName();
+		AES aes = new AES();
+		String hashedFileName = aes.hash(fileName);
+		Scanner myScan = new Scanner(sumFile);
+		while(myScan.hasNext()) {
+			if(!myScan.next().equals(hashedFileName)) {
+				sb += myScan.next();
+			} else {
+				hashedPass = myScan.next();
+			}
+		}
+		;
+		sb = sb.replace(hashedFileName,"").replace(hashedPass,"");
+		try {
+			FileWriter fw = new FileWriter(sumFile,false);
+			fw.write(sb);
+			fw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
 }
