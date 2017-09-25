@@ -1,4 +1,5 @@
 package default_package;
+import java.awt.HeadlessException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -118,6 +119,26 @@ public class window implements java.awt.event.ActionListener
 		 */
 		else if ((e.getActionCommand().equals("encrypt")) && (filePath != null)) {
 			System.out.println(filePath);
+			//Check if the file is already encrypted with VoidCrypt
+			try {
+				if(isAlreadyVCEncrypted(filePath)) {
+					JOptionPane.showMessageDialog(this.window,"This file is already encryped with VoidCrypt");
+					return;
+				}
+			} catch (HeadlessException e3) {
+				// TODO Auto-generated catch block
+				e3.printStackTrace();
+			} catch (UnsupportedEncodingException e3) {
+				// TODO Auto-generated catch block
+				e3.printStackTrace();
+			} catch (NoSuchAlgorithmException e3) {
+				// TODO Auto-generated catch block
+				e3.printStackTrace();
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			//End of try/catch block
 			System.out.println("encrypt selected");
 			
 			String password = null;
@@ -277,7 +298,18 @@ public class window implements java.awt.event.ActionListener
 		}
 		return false;
 	}
-	private boolean isAlreadyVCEncrypted(String filePath) {
-		
+	@SuppressWarnings("static-access")
+	private boolean isAlreadyVCEncrypted(String filePath) throws UnsupportedEncodingException, NoSuchAlgorithmException, FileNotFoundException {
+		AES aes = new AES();
+		File f = new File(filePath);
+		String hashedFileName = aes.hash(f.getName());
+		File sumFile = new File("sums.info");
+		Scanner myScan = new Scanner(sumFile);
+		while(myScan.hasNext()) {
+			if(myScan.next().equals(hashedFileName)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
