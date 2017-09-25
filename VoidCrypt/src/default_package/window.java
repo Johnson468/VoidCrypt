@@ -25,7 +25,7 @@ public class window implements java.awt.event.ActionListener
 	encryptButton eb;
 	decryptButton db;
 	selectNewButton snb;
-	String[] VCExtensions = {"VCjpg","VCtxt","VCdoc"};
+	deleteLogButton dlb;
 	AES aes;
 	//Constructor to set up values and initialize objects
 	public window() {
@@ -43,15 +43,18 @@ public class window implements java.awt.event.ActionListener
 		eb = new encryptButton();
 		db = new decryptButton();
 		snb = new selectNewButton();
+		dlb = new deleteLogButton();
 		setVisibles(false);
 		sb.addActionListener(this);
 		eb.addActionListener(this);
 		db.addActionListener(this);
 		snb.addActionListener(this);
+		dlb.addActionListener(this);
 		pan.add(snb);
 		pan.add(sb);
 		pan.add(eb);
 		pan.add(db);
+		pan.add(dlb);
 		window.add(pan);
 		window.setVisible(true);
 		logger = Logger.getLogger(window.getClass());
@@ -66,11 +69,11 @@ public class window implements java.awt.event.ActionListener
 		 * If so set the filepath to the selected file
 		 * Set variables
 		 */
-		if ((e.getSource() == fc) && (fc.getSelectedFile() != null)) {
+		if ((e.getSource() == fc)) {
 			filePath = fc.getSelectedFile().getPath().replace("\\", "/");
 			setLabel(filePath + " selected.");
 			setVisibles(true);
-		}else if (fc.getSelectedFile() == null) {
+		}else if (fc.getSelectedFile() == null && !e.getActionCommand().equals("delete_logs")) {
 			JOptionPane.showMessageDialog(this.window,"Please select a file");
 		}
 		/*
@@ -123,6 +126,7 @@ public class window implements java.awt.event.ActionListener
 			try {
 				if(isAlreadyVCEncrypted(filePath)) {
 					JOptionPane.showMessageDialog(this.window,"This file is already encryped with VoidCrypt");
+					logger.info("The selected file is already encrypted with VoidCrypt");
 					return;
 				}
 			} catch (HeadlessException e3) {
@@ -229,6 +233,10 @@ public class window implements java.awt.event.ActionListener
 		} else if (e.getActionCommand().equals("selectNew")) {
 			System.out.println("new button selected");
 			setVisibles(false);
+		} else if (e.getActionCommand().equals("delete_logs")) {
+			File logFile = new File("C:\\VoidCrypt\\logs\\log4j-application.log");
+			logFile.delete();
+			JOptionPane.showMessageDialog(this.window, "Logs successfully deleted");
 		}
 	}
 	/*
@@ -242,6 +250,7 @@ public class window implements java.awt.event.ActionListener
 		db.setVisible(sh);
 		snb.setVisible(sh);
 		fc.setVisible(!sh);
+		dlb.setVisible(!sh);
 		if (sh) {
 			window.setSize(400, 300);
 		} else {
@@ -258,6 +267,10 @@ public class window implements java.awt.event.ActionListener
 	private boolean passIsSame(String p1, String p2) {
 		return p1.equals(p2) && !p1.equals("");
 	}
+	/*
+	 * Hash the users password, the file name and store them 
+	 * 
+	 */
 	@SuppressWarnings("static-access")
 	private void storeHashedPass(String s,String filePath) throws NoSuchAlgorithmException {
 		VoidFile sumFile = new VoidFile("sums.info");
@@ -298,6 +311,10 @@ public class window implements java.awt.event.ActionListener
 		}
 		return false;
 	}
+	/*
+	 * Check if the file selected has already been encrypted with VoidCrypt
+	 * 
+	 */
 	@SuppressWarnings("static-access")
 	private boolean isAlreadyVCEncrypted(String filePath) throws UnsupportedEncodingException, NoSuchAlgorithmException, FileNotFoundException {
 		AES aes = new AES();
