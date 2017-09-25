@@ -1,12 +1,21 @@
 package default_package;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Scanner;
+
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import org.apache.log4j.Logger;
+
 public class window implements java.awt.event.ActionListener
 {
+	Logger logger;
 	JFrame window;
 	String filePath = null;
 	JFileChooser fc = new JFileChooser();
@@ -44,9 +53,10 @@ public class window implements java.awt.event.ActionListener
 		pan.add(db);
 		window.add(pan);
 		window.setVisible(true);
+		logger = Logger.getLogger(window.getClass());
 	}
 	//Action listener for this class
-	public void actionPerformed(java.awt.event.ActionEvent e) {
+	public void actionPerformed(java.awt.event.ActionEvent e)  {
 		String reenteredPass;
 		JOptionPane confirmPane = new JOptionPane();
 		/*
@@ -93,7 +103,8 @@ public class window implements java.awt.event.ActionListener
 					e1.printStackTrace();
 				} catch (Exception e1) {
 					System.out.println("Please allow file access");
-
+					logger.error(e1);
+					logger.info("Permission Error");
 					e1.printStackTrace();
 				}
 			}
@@ -108,8 +119,9 @@ public class window implements java.awt.event.ActionListener
 		else if ((e.getActionCommand().equals("encrypt")) && (filePath != null)) {
 			System.out.println(filePath);
 			System.out.println("encrypt selected");
+			
 			String password = null;
-			try {//
+			try {
 				do{
 					password = JOptionPane.showInputDialog(window, "Enter a password to encrypt the file (You MUST remember this to decrypt)");
 					reenteredPass = JOptionPane.showInputDialog(window, "Enter the password again");
@@ -125,7 +137,7 @@ public class window implements java.awt.event.ActionListener
 				try {
 					aes = new AES(filePath, password);
 					if (aes == null) return;
-					String hashedValue = AES.hash(password);
+					storeHashedPass(AES.hash(password),filePath);
 					AES.encrypt();
 
 				}
@@ -160,6 +172,23 @@ public class window implements java.awt.event.ActionListener
 				e2.printStackTrace();
 			}
 			if (password != null) {
+				//Check if the correct password is entered for the file
+				try {
+					if(!correctPass(password,filePath)){
+						JOptionPane.showMessageDialog(this.window, "Incorrect password entered or this file is not encrypted with VoidCrypt");
+						logger.info("Incorrect password entered or file is not encrypted with VoidCrypt");
+						return;
+					}
+				} catch (FileNotFoundException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				} catch (UnsupportedEncodingException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				} catch (NoSuchAlgorithmException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
 				try {
 					aes = new AES(filePath, password);
 					if (aes != null) {
@@ -212,7 +241,44 @@ public class window implements java.awt.event.ActionListener
 	private boolean passIsSame(String p1, String p2) {
 		return p1.equals(p2) && !p1.equals("");
 	}
-	private void storeHashedPass(String s) {
-		
+	@SuppressWarnings("static-access")
+	private void storeHashedPass(String s,String filePath) throws NoSuchAlgorithmException {
+		VoidFile sumFile = new VoidFile("sums.info");
+		File f = new File(filePath);
+		String fileName = f.getName();
+		try {
+			FileWriter fw = new FileWriter(sumFile,true);
+			AES aes = new AES();
+			String hashedFileName = aes.hash(fileName);
+			fw.write(hashedFileName + " " + s + "\n");
+			fw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	/*
+	 * @Params: 
+	 * s- The password entered by the user
+	 * filePath- The filepath of the file trying to be decrypted
+	 * Hash the password and file name
+	 * Scan the file until it finds a hash the matches the hashed file name
+	 * @Return vals:
+	 * If the next value after the hashed file name is the hashed pass, return true
+	 * Default to return false
+	 */
+	@SuppressWarnings("static-access")
+	private boolean correctPass(String s, String filePath) throws FileNotFoundException, UnsupportedEncodingException, NoSuchAlgorithmException {
+		AES aes = new AES();
+		String hashedPass = aes.hash(s);
+		File decryptFile = new File(filePath);
+		String hashedFileName = aes.hash(decryptFile.getName());
+		File sumFile = new File("sums.info");
+		Scanner myScan = new Scanner(sumFile);
+		while(myScan.hasNext()) {
+			if(myScan.next().equals(hashedFileName)) {
+				return myScan.next().equals(hashedPass);
+			}
+		}
+		return false;
 	}
 }

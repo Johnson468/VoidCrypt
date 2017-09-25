@@ -44,7 +44,9 @@ public class AES
     SecureRandom rand = new SecureRandom(SecureRandom.getSeed((int)System.currentTimeMillis()));
     key = keyGen(hash(String.valueOf(rand.nextLong())));
   }
-  
+  public AES() {
+	  
+  }
   private static byte[] getFile() {
     VoidFile f = new VoidFile(filePath);
     InputStream is = null;
