@@ -122,7 +122,6 @@ public class AES
     FileOutputStream fos = new FileOutputStream(filePath);
     fos.write(bytes);
     fos.close();
-    vf.setExtension(filePath);
   }
   
   private static Key keyGen(String k) throws Exception {
