@@ -278,6 +278,12 @@ public class window implements java.awt.event.ActionListener
 			FileWriter fw = new FileWriter(sumFile,true);
 			AES aes = new AES();
 			String hashedFileName = aes.hash(fileName);
+			String salt = "";
+			for (char c:hashedFileName.toCharArray()) {
+				salt+=aes.hash(c + "");
+			}
+			salt=aes.hash(salt);
+			s=aes.hash(s+salt);
 			fw.write(hashedFileName + " " + s + "\n");
 			fw.close();
 		} catch (IOException e) {
@@ -300,12 +306,16 @@ public class window implements java.awt.event.ActionListener
 		String hashedPass = aes.hash(s);
 		File decryptFile = new File(filePath);
 		String hashedFileName = aes.hash(decryptFile.getName());
+		String salt = "";
+		for(char c: hashedFileName.toCharArray()) {
+			salt+= aes.hash(c + "");
+		}
+		salt=aes.hash(salt);
 		File sumFile = new File("sums.info");
 		Scanner myScan = new Scanner(sumFile);
 		while(myScan.hasNext()) {
 			if(myScan.next().equals(hashedFileName)) {
-				;
-				return myScan.next().equals(hashedPass);
+				return myScan.next().equals(aes.hash(hashedPass + salt));
 			}
 		}
 		;
@@ -348,10 +358,10 @@ public class window implements java.awt.event.ActionListener
 				hashedPass = myScan.next();
 			}
 		}
-		;
+		
 		sb = sb.replace(hashedFileName,"").replace(hashedPass,"");
 		try {
-			FileWriter fw = new FileWriter(sumFile,false);
+			FileWriter fw = new FileWriter(sumFile,true);
 			fw.write(sb);
 			fw.close();
 		} catch (IOException e) {
