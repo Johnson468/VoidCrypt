@@ -26,10 +26,10 @@ public class main
     window w = new window();
   }
   private static boolean isFirstRun() {
-	  return !(new File("sums.info").exists());
+	  return !(new File("C:/VoidCrypt/sums.info").exists());
   }
   private static boolean setupSumFile() throws Exception {
-	  File sumFile = new File("sums.info");
+	  File sumFile = new File("C:/VoidCrypt/sums.info");
 	  if(!sumFile.exists()) {
 		  sumFile.createNewFile();
 	  }

@@ -151,8 +151,10 @@ public class window implements java.awt.event.ActionListener
 					reenteredPass = JOptionPane.showInputDialog(window, "Enter the password again");
 					if (!password.equals(reenteredPass) || password.equals("")) {
 						JOptionPane.showMessageDialog(window, "Passwords must match and not be empty");
+					} else if (passTooShort(password)) {
+						JOptionPane.showMessageDialog(this.window, "Passwords must be 8 characters or longer");
 					}
-				} while(!passIsSame(password,reenteredPass));
+				} while(!passIsSame(password,reenteredPass) || passTooShort(password));
 			}
 			catch (java.awt.HeadlessException e2) {
 				e2.printStackTrace();
@@ -177,6 +179,7 @@ public class window implements java.awt.event.ActionListener
 					return;
 				}
 			}
+			setVisibles(false);
 		}
 		/*
 		 * Get the users password 
@@ -225,6 +228,7 @@ public class window implements java.awt.event.ActionListener
 				} catch (Exception e1) {
 					e1.printStackTrace();
 					JOptionPane.showMessageDialog(window, "Please allow access to this application in order to protect your sensitive data");
+					logger.info("Access error");
 					return;
 				}
 			}
@@ -271,7 +275,7 @@ public class window implements java.awt.event.ActionListener
 	 */
 	@SuppressWarnings("static-access")
 	private void storeHashedPass(String s,String filePath) throws NoSuchAlgorithmException {
-		VoidFile sumFile = new VoidFile("sums.info");
+		VoidFile sumFile = new VoidFile("C:\\VoidCrypt\\sums.info");
 		File f = new File(filePath);
 		String fileName = f.getName();
 		try {
@@ -311,7 +315,7 @@ public class window implements java.awt.event.ActionListener
 			salt+= aes.hash(c + "");
 		}
 		salt=aes.hash(salt);
-		File sumFile = new File("sums.info");
+		File sumFile = new File("C:\\VoidCrypt\\sums.info");
 		Scanner myScan = new Scanner(sumFile);
 		while(myScan.hasNext()) {
 			if(myScan.next().equals(hashedFileName)) {
@@ -330,11 +334,10 @@ public class window implements java.awt.event.ActionListener
 		AES aes = new AES();
 		File f = new File(filePath);
 		String hashedFileName = aes.hash(f.getName());
-		File sumFile = new File("sums.info");
+		File sumFile = new File("C:\\VoidCrypt\\sums.info");
 		Scanner myScan = new Scanner(sumFile);
 		while(myScan.hasNext()) {
 			if(myScan.next().equals(hashedFileName)) {
-				;
 				return true;
 			}
 		}
@@ -346,19 +349,26 @@ public class window implements java.awt.event.ActionListener
 		String sb = "";
 		String hashedPass = "";
 		File f = new File(filePath);
-		File sumFile = new File("sums.info");
+		File sumFile = new File("C:\\VoidCrypt\\sums.info");
 		String fileName = f.getName();
 		AES aes = new AES();
 		String hashedFileName = aes.hash(fileName);
 		Scanner myScan = new Scanner(sumFile);
 		while(myScan.hasNext()) {
 			if(!myScan.next().equals(hashedFileName)) {
-				sb += myScan.next();
+				sb += myScan.next() + " ";
 			} else {
-				hashedPass = myScan.next();
+				String s = myScan.next();
+				sb+=s + "\n";
+				hashedPass = s;
 			}
 		}
-		
+		String salt = "";
+		for (char c : hashedFileName.toCharArray()) {
+			salt+=aes.hash(c + "");
+		}
+		salt = aes.hash(salt);
+		hashedPass = aes.hash(hashedPass + salt);
 		sb = sb.replace(hashedFileName,"").replace(hashedPass,"");
 		try {
 			FileWriter fw = new FileWriter(sumFile,true);
@@ -370,6 +380,8 @@ public class window implements java.awt.event.ActionListener
 		}
 		
 	}
-	
+	public boolean passTooShort(String s) {
+		return s.length()<8;
+	}
 	
 }
