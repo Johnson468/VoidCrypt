@@ -285,7 +285,7 @@ public class window implements java.awt.event.ActionListener
 			}
 			salt=aes.hash(salt);
 			s=aes.hash(s+salt);
-			fw.write(hashedFileName + " " + s + "\n");
+			fw.write("\n" + hashedFileName + " " + s + "\n");
 			fw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -341,6 +341,13 @@ public class window implements java.awt.event.ActionListener
 		;
 		return false;
 	}
+	/*
+	 * Iterate through the file
+	 * If the line doesn't contain the hashed file name, add that line and a newline to the sb variable
+	 * If it does, add a blank and continue
+	 * Write the contents to the sums file
+	 * 
+	 */
 	@SuppressWarnings({ "static-access", "resource" })
 	private void removeFileInfo(String filePath) throws UnsupportedEncodingException, NoSuchAlgorithmException, FileNotFoundException {
 		//Contents of the file
@@ -353,25 +360,12 @@ public class window implements java.awt.event.ActionListener
 		AES aes = new AES();
 		String hashedFileName = aes.hash(fileName);
 		Scanner myScan = new Scanner(sumFile);
-		while(myScan.hasNext()) {
-			if(!myScan.next().equals(hashedFileName)) {
-				sb += myScan.next() + " ";
-				sb += myScan.next() + "\n";
+		while(myScan.hasNextLine()) {
+			if(!myScan.nextLine().contains(hashedFileName)) {
+				sb += myScan.nextLine() + "\n";
 			} else {
-				sb+=myScan.next() + " ";
-				String hp = myScan.next();
-				sb+=hp + "\n";
-				hashedPass = hp;
-			}
+				sb+="";
 		}
-		String salt = "";
-		for (char c : hashedFileName.toCharArray()) {
-			salt+=aes.hash(c + "");
-		}
-		salt = aes.hash(salt);
-		hashedPass = aes.hash(hashedPass + salt);
-		sb = sb.replace(hashedPass,"");
-		sb = sb.replace(hashedFileName,"");
 		try {
 			FileWriter fw = new FileWriter(sumFile,false);
 			fw.write(sb);
@@ -380,6 +374,7 @@ public class window implements java.awt.event.ActionListener
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	   }
 		
 	}
 	public boolean passTooShort(String s) {
