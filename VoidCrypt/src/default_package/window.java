@@ -59,7 +59,11 @@ public class window implements java.awt.event.ActionListener
 		window.setVisible(true);
 		logger = Logger.getLogger(window.getClass());
 	}
-	//Action listener for this class
+	/*
+	 * This action listener contains multiple possible paths a user can take
+	 * Each "branch" has its own procedure behind it
+	 * All functions called are below the listener, unless contained in another class
+	 */
 	public void actionPerformed(java.awt.event.ActionEvent e)  {
 		String reenteredPass;
 		JOptionPane confirmPane = new JOptionPane();
@@ -114,10 +118,12 @@ public class window implements java.awt.event.ActionListener
 			}
 		}
 		/*
-		 * Check if the encrypt button was created
+		 * Check if the encrypt button was clicked
+		 * Make sure the file isn't already encrypted with VoidCrypt
 		 * Get a password to encrypt the file with
 		 * Create an AES object passing the filepath and the user's password
 		 * Encrypt the file
+		 * Store hashed filename and salted password in the sum file
 		 * 
 		 */
 		else if ((e.getActionCommand().equals("encrypt")) && (filePath != null)) {
@@ -185,6 +191,7 @@ public class window implements java.awt.event.ActionListener
 		 * Get the users password 
 		 * Create an AES object passing it the filepath and the password
 		 * Decrypt the file using the password
+		 * Remove file info from the sumsfile
 		 */
 		else if (e.getActionCommand().equals("decrypt") && filePath != null) {
 			String password = null;
@@ -230,13 +237,16 @@ public class window implements java.awt.event.ActionListener
 				}
 			}
 			setVisibles(false);
+			//Show the file selector
 		} else if (e.getActionCommand().equals("selectNew")) {
 			setVisibles(false);
+			//Delete the logs
 		} else if (e.getActionCommand().equals("delete_logs")) {
 			File logFile = new File("C:\\VoidCrypt\\logs\\log4j-application.log");
 			logFile.delete();
 			JOptionPane.showMessageDialog(this.window, "Logs successfully deleted");
 		}
+		//End of actionlistener
 	}
 	/*
 	 * Set the visibilites of buttons and the file chooser 
@@ -352,8 +362,6 @@ public class window implements java.awt.event.ActionListener
 	private void removeFileInfo(String filePath) throws UnsupportedEncodingException, NoSuchAlgorithmException, FileNotFoundException {
 		//Contents of the file
 		String sb = "";
-		//The hashed pass
-		String hashedPass = "";
 		File f = new File(filePath);
 		File sumFile = new File("C:\\VoidCrypt\\sums.info");
 		String fileName = f.getName();
