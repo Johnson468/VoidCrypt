@@ -203,13 +203,10 @@ public class window implements java.awt.event.ActionListener
 						return;
 					}
 				} catch (FileNotFoundException e2) {
-					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				} catch (UnsupportedEncodingException e2) {
-					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				} catch (NoSuchAlgorithmException e2) {
-					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
 				try {
@@ -346,7 +343,9 @@ public class window implements java.awt.event.ActionListener
 	}
 	@SuppressWarnings({ "static-access", "resource" })
 	private void removeFileInfo(String filePath) throws UnsupportedEncodingException, NoSuchAlgorithmException, FileNotFoundException {
+		//Contents of the file
 		String sb = "";
+		//The hashed pass
 		String hashedPass = "";
 		File f = new File(filePath);
 		File sumFile = new File("C:\\VoidCrypt\\sums.info");
@@ -357,10 +356,12 @@ public class window implements java.awt.event.ActionListener
 		while(myScan.hasNext()) {
 			if(!myScan.next().equals(hashedFileName)) {
 				sb += myScan.next() + " ";
+				sb += myScan.next() + "\n";
 			} else {
-				String s = myScan.next();
-				sb+=s + "\n";
-				hashedPass = s;
+				sb+=myScan.next() + " ";
+				String hp = myScan.next();
+				sb+=hp + "\n";
+				hashedPass = hp;
 			}
 		}
 		String salt = "";
@@ -369,9 +370,10 @@ public class window implements java.awt.event.ActionListener
 		}
 		salt = aes.hash(salt);
 		hashedPass = aes.hash(hashedPass + salt);
-		sb = sb.replace(hashedFileName,"").replace(hashedPass,"");
+		sb = sb.replace(hashedPass,"");
+		sb = sb.replace(hashedFileName,"");
 		try {
-			FileWriter fw = new FileWriter(sumFile,true);
+			FileWriter fw = new FileWriter(sumFile,false);
 			fw.write(sb);
 			fw.close();
 		} catch (IOException e) {
