@@ -72,7 +72,7 @@ public class AES
     
     return content;
   }
-  
+
   public static void encrypt() throws Exception {
     byte[] encrypted = null;
     byte[] content = getFile();
@@ -128,6 +128,7 @@ public class AES
     SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
     KeySpec spec = new javax.crypto.spec.PBEKeySpec(k.toCharArray(), k.getBytes(), 12, 128);
     SecretKey tmp = factory.generateSecret(spec);
+    //Designate the encryption as AES
     return new SecretKeySpec(tmp.getEncoded(), "AES");
   }
   
