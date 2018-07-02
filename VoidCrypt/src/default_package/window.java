@@ -295,7 +295,7 @@ public class window implements java.awt.event.ActionListener
 			}
 			salt=aes.hash(salt);
 			s=aes.hash(s+salt);
-			fw.write("\n" + hashedFileName + " " + s + "\n");
+			fw.write(hashedFileName + " " + s + "\n");
 			fw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -368,9 +368,11 @@ public class window implements java.awt.event.ActionListener
 		AES aes = new AES();
 		String hashedFileName = aes.hash(fileName);
 		Scanner myScan = new Scanner(sumFile);
+		String line;
 		while(myScan.hasNextLine()) {
-			if(!myScan.nextLine().contains(hashedFileName)) {
-				sb += myScan.nextLine() + "\n";
+			line=myScan.nextLine();
+			if(!line.contains(hashedFileName)) {
+				sb += line + "\n";
 			} else {
 				sb+="";
 		}
