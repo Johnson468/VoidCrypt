@@ -39,7 +39,7 @@ public class window implements java.awt.event.ActionListener
 		fc.setSize(700, 500);
 		pan.add(fc);
 		fc.addActionListener(this);
-		sb = new shreadButton("Shread");
+		sb = new shreadButton("Shred");
 		eb = new encryptButton();
 		db = new decryptButton();
 		snb = new selectNewButton();
