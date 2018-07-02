@@ -151,6 +151,7 @@ public class window implements java.awt.event.ActionListener
 			//End of try/catch block
 			
 			String password = null;
+			//Make sure people don't enter different passwords
 			try {
 				do{
 					password = JOptionPane.showInputDialog(window, "Enter a password to encrypt the file (You MUST remember this to decrypt)");
@@ -169,9 +170,8 @@ public class window implements java.awt.event.ActionListener
 				try {
 					aes = new AES(filePath, password);
 					if (aes == null) return;
-					storeHashedPass(AES.hash(password),filePath);
 					AES.encrypt();
-
+					storeHashedPass(AES.hash(password),filePath);
 				}
 				catch (UnsupportedEncodingException e1)
 				{
