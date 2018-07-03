@@ -25,7 +25,7 @@ public class AES
 
   static String pass;
   static Key key;
-  static boolean isShread;
+  static boolean isShred;
   
   public AES(String filePath, String pass) throws UnsupportedEncodingException, NoSuchAlgorithmException, Exception
   {
@@ -36,11 +36,11 @@ public class AES
   /*
    * AES constructor for shred only
    */
-  public AES(String filePath, boolean isShread)
+  public AES(String filePath, boolean isShred)
     throws UnsupportedEncodingException, NoSuchAlgorithmException, Exception
   {
     AES.filePath = filePath;
-    AES.isShread = isShread;
+    AES.isShred = isShred;
     SecureRandom rand = new SecureRandom(SecureRandom.getSeed((int)System.currentTimeMillis()));
     key = keyGen(hash(String.valueOf(rand.nextLong())));
   }
@@ -76,12 +76,18 @@ public class AES
   public static void encrypt() throws Exception {
     byte[] encrypted = null;
     byte[] content = getFile();
+    SecureRandom rand = new SecureRandom(SecureRandom.getSeed((int)System.currentTimeMillis()));
     for (int x = 0; x < 1000; x++) {
       
       try
       {
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-        cipher.init(1, key);
+        if(isShred) {
+        	cipher.init(1, keyGen(hash(String.valueOf(rand.nextLong()))));
+        } else {
+        	cipher.init(1, key);
+        }
+        
         encrypted = cipher.doFinal(content);
         content = encrypted;
       } catch (Exception e) {
@@ -90,12 +96,12 @@ public class AES
     }
     saveFile(encrypted);
     
-    if (!isShread) {
+    if (!isShred) {
       JOptionPane.showMessageDialog(null, "Encryption complete");
     } else {
-      JOptionPane.showMessageDialog(null, "Shread complete");
+      JOptionPane.showMessageDialog(null, "shred complete");
     }
-    isShread = false;
+    isShred = false;
   }
   
   public static void decrypt() throws Exception
@@ -142,8 +148,9 @@ public class AES
       return sb.toString();
   }
   
-  public static boolean shread() throws Exception { encrypt();
+  public static boolean shred() throws Exception { 
+	encrypt();
     VoidFile f = new VoidFile(filePath.replace("\\", "/"));
-    return f.delete();
+    return f.exists();
   }
 }

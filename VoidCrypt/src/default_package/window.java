@@ -21,7 +21,7 @@ public class window implements java.awt.event.ActionListener
 	String filePath = null;
 	JFileChooser fc = new JFileChooser();
 	javax.swing.JLabel label = null;
-	shreadButton sb;
+	shredButton sb;
 	encryptButton eb;
 	decryptButton db;
 	selectNewButton snb;
@@ -39,7 +39,7 @@ public class window implements java.awt.event.ActionListener
 		fc.setSize(700, 500);
 		pan.add(fc);
 		fc.addActionListener(this);
-		sb = new shreadButton("Shred");
+		sb = new shredButton("Shred");
 		eb = new encryptButton();
 		db = new decryptButton();
 		snb = new selectNewButton();
@@ -84,19 +84,19 @@ public class window implements java.awt.event.ActionListener
 		 * Check if the shred button is clicked
 		 * If so, make sure the user wants to destroy the file
 		 * Create a new AES object passing it special params 
-		 * Call the shread function of the AES object and check if the deletion
+		 * Call the shred function of the AES object and check if the deletion
 		 * was successful or not. Either way the file is encrypted 10000+ times 
 		 * with no recoverable key.
 		 */
-		if ((e.getActionCommand().equals("shread")) && (filePath != null))
+		if ((e.getActionCommand().equals("shred")) && (filePath != null))
 		{
 			confirmPane.createDialog(window, "Are you sure?");
-			if (JOptionPane.showConfirmDialog(window, "Are you sure you want to destroy " + filePath + " using military grade shreading algorithms?") == 0) {
+			if (JOptionPane.showConfirmDialog(window, "Are you sure you want to destroy " + filePath + " using military grade shreding algorithms?") == 0) {
 				System.out.println("Yes");
 				try {
 					aes = new AES(filePath, true);
 					if (aes == null) return;
-					if (!AES.shread()) {
+					if (!AES.shred()) {
 						JOptionPane.showMessageDialog(window, "File deletion failed");
 					} else {
 						JOptionPane.showMessageDialog(window, "File deleted and overwritten");
