@@ -151,6 +151,6 @@ public class AES
   public static boolean shred() throws Exception { 
 	encrypt();
     VoidFile f = new VoidFile(filePath.replace("\\", "/"));
-    return f.exists();
+    return f.delete();
   }
 }
